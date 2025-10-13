@@ -1416,7 +1416,7 @@ class TrainingFragment : Fragment() {
                             // Consider renaming base64penSpaceProofImage to base64OpenSpaceProofImage for clarity
                         }
 
-                        "parkingProof" -> {
+                        "parking" -> {
                             ivParkingProofPreview.setImageURI(photoUri)
                             ivParkingProofPreview.visibility = View.VISIBLE
                             base64ParkingSpaceProofImage = AppUtil.imageUriToBase64(requireContext(), photoUri)
@@ -4772,7 +4772,27 @@ class TrainingFragment : Fragment() {
 
                 if (!expansionStates[index]) {
                     content.visibility = View.GONE
-                    icon.setImageResource(R.drawable.ic_dropdown_arrow)
+
+                    val sectionCount = when (index) {
+                        0 -> sectionsStatus.infoSection
+                        1 -> sectionsStatus.careraSection
+                        2 -> sectionsStatus.wiringSection
+                        3 -> sectionsStatus.generalDetailsSection
+                        5 -> sectionsStatus.signageSection
+                        6 -> sectionsStatus.descOtherAreaSection
+                        7 -> sectionsStatus.toiletWashBasinSection
+                        8 -> sectionsStatus.supportInfraSection
+                        9 -> sectionsStatus.commonEquipSection
+                        else -> 0
+                    }
+
+                    val iconRes = if (sectionCount > 0) {
+                        R.drawable.ic_verified
+                    } else {
+                        R.drawable.ic_dropdown_arrow
+                    }
+
+                    icon.setImageResource(iconRes)
                     return@setOnClickListener
                 }
 
@@ -4930,10 +4950,15 @@ class TrainingFragment : Fragment() {
                             spinnerDetailsMap[R.id.spinnerStorage] = x.cctvStorage
                             spinnerDetailsMap[R.id.spinnerDVRStaticIP] = x.dvrStaticIp
 
-                            imagesMap[ivMonitorPreview] = x.centralMonitorImagePath.toString()
-                            imagesMap[ivConformancePreview] = x.cctvConformanceImagePath.toString()
-                            imagesMap[ivStoragePreview] = x.cctvStorageImagePath.toString()
-                            imagesMap[ivDVRPreview] = x.dvrStaticIpImagePath.toString()
+                            base64MonitorFile = x.centralMonitorImagePath.toString()
+                            base64ConformanceFile = x.cctvConformanceImagePath.toString()
+                            base64StorageFile = x.cctvStorageImagePath.toString()
+                            base64DVRFile = x.dvrStaticIpImagePath.toString()
+
+                            imagesMap[ivMonitorPreview] = base64MonitorFile
+                            imagesMap[ivConformancePreview] = base64ConformanceFile
+                            imagesMap[ivStoragePreview] = base64StorageFile
+                            imagesMap[ivDVRPreview] = base64DVRFile
 
                             updateSpinner(spinnerDetailsMap)
                             showBase64Image(imagesMap)
@@ -4987,15 +5012,25 @@ class TrainingFragment : Fragment() {
                             actvOverheadTanks.setText(x.overheadTanks, false)
                             actvTypeOfFlooring.setText(x.flooringType, false)
 
-                            imagesMap[ivPreviewMaleToiletsProof] = x.maleToiletImage
-                            imagesMap[ivPreviewMaleToiletsSignageProof] = x.maleToiletSignageImage
-                            imagesMap[ivPreviewFemaleToiletsProof] = x.femaleToiletImage
-                            imagesMap[ivPreviewFemaleToiletsSignageProof] = x.femaleToiletSignageImage
-                            imagesMap[ivPreviewMaleUrinalsProof] = x.maleUrinalImage
-                            imagesMap[ivPreviewMaleWashBasinsProof] = x.maleWashBasinImage
-                            imagesMap[ivPreviewFemaleWashBasinsProof] = x.femaleWashBasinImage
-                            imagesMap[ivPreviewOverheadTanksProof] = x.overheadTankImage
-                            imagesMap[ivPreviewFlooringProof] = x.flooringTypeImage
+                            base64ProofMaleToilets = x.maleToiletImage
+                            base64ProofMaleToiletsSignage = x.maleToiletSignageImage
+                            base64ProofFemaleToilets = x.femaleToiletImage
+                            base64ProofFemaleToiletsSignage = x.femaleToiletSignageImage
+                            base64ProofMaleUrinals = x.maleUrinalImage
+                            base64ProofMaleWashBasins = x.maleWashBasinImage
+                            base64ProofFemaleWashBasins = x.femaleWashBasinImage
+                            base64ProofOverheadTanks = x.overheadTankImage
+                            base64ProofFlooring = x.flooringTypeImage
+
+                            imagesMap[ivPreviewMaleToiletsProof] = base64ProofMaleToilets
+                            imagesMap[ivPreviewMaleToiletsSignageProof] = base64ProofMaleToiletsSignage
+                            imagesMap[ivPreviewFemaleToiletsProof] = base64ProofFemaleToilets
+                            imagesMap[ivPreviewFemaleToiletsSignageProof] = base64ProofFemaleToiletsSignage
+                            imagesMap[ivPreviewMaleUrinalsProof] = base64ProofMaleUrinals
+                            imagesMap[ivPreviewMaleWashBasinsProof] = base64ProofMaleWashBasins
+                            imagesMap[ivPreviewFemaleWashBasinsProof] = base64ProofFemaleWashBasins
+                            imagesMap[ivPreviewOverheadTanksProof] = base64ProofOverheadTanks
+                            imagesMap[ivPreviewFlooringProof] = base64ProofFlooring
 
                             showBase64Image(imagesMap)
                         }
@@ -5052,15 +5087,25 @@ class TrainingFragment : Fragment() {
                             spinnerDetailsMap[spinnerMinimumEquipment] = x.minimumEquipment.toString()
                             spinnerDetailsMap[spinnerDirectionBoards] = x.directionBoard.toString()
 
-                            imagesMap[ivPowerBackupPreview] = x.ecPowerBackupImage.toString()
-                            imagesMap[ivBiometricDevicesPreview] =  x.biomatricDeviceInstallationImage.toString()
-                            imagesMap[ivCCTVPreview] = x.cctvMoniotrInstallImage.toString()
-                            imagesMap[ivDocumentStoragePreview] = x.storageSecuringImage.toString()
-                            imagesMap[ivPrinterScannerPreview] = x.printerScannerImage.toString()
-                            imagesMap[ivDigitalCameraPreview] = x.digitalCameraImage.toString()
-                            imagesMap[ivGrievanceRegisterPreview] = x.grievanceRegisterImage.toString()
-                            imagesMap[ivMinimumEquipmentPreview] = x.minimumEquipmentImage.toString()
-                            imagesMap[ivDirectionBoardsPreview] =x.directionBoardImage.toString()
+                             base64PowerBackupImage = x.ecPowerBackupImage.toString()
+                             base64BiometricDevices = x.biomatricDeviceInstallationImage.toString()
+                             base64CCTVImage = x.cctvMoniotrInstallImage.toString()
+                             base64DocumentStorageImage = x.storageSecuringImage.toString()
+                             base64PrinterScanner = x.printerScannerImage.toString()
+                             base64DigitalCamera = x.digitalCameraImage.toString()
+                             base64GrievanceRegisterImage = x.grievanceRegisterImage.toString()
+                             base64MinimumEquipmentImage = x.minimumEquipmentImage.toString()
+                             base64DirectionBoardsImage = x.directionBoardImage.toString()
+
+                            imagesMap[ivPowerBackupPreview] = base64PowerBackupImage
+                            imagesMap[ivBiometricDevicesPreview] = base64BiometricDevices
+                            imagesMap[ivCCTVPreview] = base64CCTVImage
+                            imagesMap[ivDocumentStoragePreview] = base64DocumentStorageImage
+                            imagesMap[ivPrinterScannerPreview] = base64PrinterScanner
+                            imagesMap[ivDigitalCameraPreview] = base64DigitalCamera
+                            imagesMap[ivGrievanceRegisterPreview] = base64GrievanceRegisterImage
+                            imagesMap[ivMinimumEquipmentPreview] = base64MinimumEquipmentImage
+                            imagesMap[ivDirectionBoardsPreview] = base64DirectionBoardsImage
 
                             showBase64Image(imagesMap)
                             updateSpinner(spinnerDetailsMap)
@@ -5115,13 +5160,21 @@ class TrainingFragment : Fragment() {
                             spinnerDetailsMap[spinnerCodeConductBoard] = x.codeConductImage.toString()
                             spinnerDetailsMap[spinnerStudentAttendanceBoard] = x.studentsAttendanceImage.toString()
 
-                            imagesMap[ivTcNameBoardPreview] = x.tcName
-                            imagesMap[ivActivityAchievementBoardPreview] = x.activityAchivement
-                            imagesMap[ivStudentEntitlementBoardPreview] =  x.studentEntitlement
-                            imagesMap[ivContactDetailBoardPreview] = x.contactDetails
-                            imagesMap[ivBasicInfoBoardPreview] = x.basicInfo
-                            imagesMap[ivCodeConductBoardPreview] = x.codeConduct
-                            imagesMap[ivStudentAttendanceBoardPreview] = x.studentsAttendance
+                            base64TcNameBoardImage = x.tcName
+                            base64ActivityAchievementBoardImage = x.activityAchivement
+                            base64StudentEntitlementBoardImage = x.studentEntitlement
+                            base64ContactDetailBoardImage = x.contactDetails
+                            base64BasicInfoBoardImage = x.basicInfo
+                            base64CodeConductBoardImage = x.codeConduct
+                            base64StudentAttendanceBoardImage = x.studentsAttendance
+
+                            imagesMap[ivTcNameBoardPreview] = base64TcNameBoardImage
+                            imagesMap[ivActivityAchievementBoardPreview] = base64ActivityAchievementBoardImage
+                            imagesMap[ivStudentEntitlementBoardPreview] = base64StudentEntitlementBoardImage
+                            imagesMap[ivContactDetailBoardPreview] = base64ContactDetailBoardImage
+                            imagesMap[ivBasicInfoBoardPreview] = base64BasicInfoBoardImage
+                            imagesMap[ivCodeConductBoardPreview] = base64CodeConductBoardImage
+                            imagesMap[ivStudentAttendanceBoardPreview] = base64StudentAttendanceBoardImage
 
                             updateSpinner(spinnerDetailsMap)
                             showBase64Image(imagesMap)
@@ -5173,8 +5226,11 @@ class TrainingFragment : Fragment() {
                             spinnerDetailsMap[spinnerDDUConformance] = x.ddugkyConfrence
                             spinnerDetailsMap[spinnerCandidateSafety] = x.centerSafty
 
-                            imagesMap[ivLeakagePreview] = x.signLeakageImage
-                            imagesMap[ivStairsPreview] = x.stairsProtectionImage
+                            base64LeakageImage = x.signLeakageImage
+                            base64StairsImage = x.stairsProtectionImage
+                            
+                            imagesMap[ivLeakagePreview] = base64LeakageImage
+                            imagesMap[ivStairsPreview] = base64StairsImage
 
                             updateSpinner(spinnerDetailsMap)
                             showBase64Image(imagesMap)
@@ -5224,8 +5280,11 @@ class TrainingFragment : Fragment() {
                             spinnerDetailsMap[R.id.spinnerSecure] = x.wireSecurity
                             spinnerDetailsMap[R.id.spinnerSwitchBoards] = x.switchBoard
 
-                            imagesMap[ivSwitchBoardPreview] = x.wireSecurityImage.toString()
-                            imagesMap[ivWireSecurityPreview] = x.switchBoardImage.toString()
+                            base64SwitchBoardImage = x.switchBoardImage.toString()
+                            base64WireSecurityImage = x.wireSecurityImage.toString()
+
+                            imagesMap[ivSwitchBoardPreview] = base64SwitchBoardImage
+                            imagesMap[ivWireSecurityPreview] = base64WireSecurityImage
 
                             updateSpinner(spinnerDetailsMap)
                             showBase64Image(imagesMap)
@@ -5277,9 +5336,13 @@ class TrainingFragment : Fragment() {
                             spinnerDetailsMap[spinnerSafeDrinkingWater] = x.drinkingWater
                             spinnerDetailsMap[spinnerFirstAidKit] = x.firstAidKit
 
-                            imagesMap[ivSafeDrinkingWaterPreview] = x.drinkingWaterImage.toString()
-                            imagesMap[ivFireFightingEquipmentPreview] = x.fireFighterEquipImage.toString()
-                            imagesMap[ivFirstAidKitPreview] = x.firstAidKitImage.toString()
+                            base64SafeDrinkingWater = x.drinkingWaterImage.toString()
+                            base64FireFightingEquipment = x.fireFighterEquipImage.toString()
+                            base64FirstAidKit = x.firstAidKitImage.toString()
+
+                            imagesMap[ivSafeDrinkingWaterPreview] = base64SafeDrinkingWater
+                            imagesMap[ivFireFightingEquipmentPreview] = base64FireFightingEquipment
+                            imagesMap[ivFirstAidKitPreview] = base64FirstAidKit
 
                             updateSpinner(spinnerDetailsMap)
                             showBase64Image(imagesMap)
@@ -5335,10 +5398,15 @@ class TrainingFragment : Fragment() {
                             etOpenSpace.setText(x.openSpace)
                             etExclusiveParkingSpace.setText(x.parkingSpace)
 
-                            imagesMap[ivProofPreview] = x.descProofImagePath.toString()
-                            imagesMap[ivCirculationProofPreview] = x.circulationAreaImagePath.toString()
-                            imagesMap[ivOpenSpaceProofPreview] = x.openSpaceImagePath.toString()
-                            imagesMap[ivParkingProofPreview] = x.parkingSpaceImagePath.toString()
+                            base64ProofUploadImage = x.descProofImagePath.toString()
+                            base64CirculationProofImage = x.circulationAreaImagePath.toString()
+                            base64penSpaceProofImage = x.openSpaceImagePath.toString()
+                            base64ParkingSpaceProofImage = x.parkingSpaceImagePath.toString()
+
+                            imagesMap[ivProofPreview] = base64ProofUploadImage
+                            imagesMap[ivCirculationProofPreview] = base64CirculationProofImage
+                            imagesMap[ivOpenSpaceProofPreview] = base64penSpaceProofImage
+                            imagesMap[ivParkingProofPreview] = base64ParkingSpaceProofImage
 
                             showBase64Image(imagesMap)
                         }
